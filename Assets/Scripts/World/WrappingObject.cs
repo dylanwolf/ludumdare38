@@ -42,52 +42,18 @@ public class WrappingObject : MonoBehaviour {
     protected Vector3 tmpV3;
     public void Wrap(TileCoord centerTile, TileCoord offset, TileWrappingMapper mapper)
     {
-        Debug.Log(string.Format("Mapping original Tile X {0} to {1}", OriginalTile.X, Tile.X));
-        try
-        {
-            Tile.X = mapper.GetNewX(OriginalTile.X);
-            Tile.Y = mapper.GetNewY(OriginalTile.Y);
-        }
-        catch
-        {
-            Debug.Log(string.Format("Get ORiginal tile failed in {0} on tile {1}, {2}", name, OriginalTile.X, OriginalTile.Y));
-            throw;
-        }
+        Tile.X = mapper.GetNewX(OriginalTile.X);
+        Tile.Y = mapper.GetNewY(OriginalTile.Y);
 
         tmpV3 = transform.position;
 
         if (Tile.X != LastTile.X)
         {
-            Debug.Log(string.Format("Moving from Tile X {0} to {1}", LastTile.X, Tile.X));
             tmpV3.x -= (WrappingWorld.Current.TileSizeX * (LastTile.X - Tile.X));
         }
 
         if (Tile.Y != LastTile.Y)
             tmpV3.y -= (WrappingWorld.Current.TileSizeY * (LastTile.Y - Tile.Y));
-
-        //if (Tile.X < centerTile.X - offset.X)
-        //{
-        //    Tile.X += (WrappingWorld.Current.GridSize.X + 1);
-        //    tmpV3.x += (WrappingWorld.Current.GridSize.X + 1) * WrappingWorld.Current.TileSizeX;
-        //}
-
-        //if (Tile.X > centerTile.X + offset.X)
-        //{
-        //    Tile.X -= (WrappingWorld.Current.GridSize.X + 1);
-        //    tmpV3.x -= (WrappingWorld.Current.GridSize.X + 1) * WrappingWorld.Current.TileSizeX;
-        //}
-
-        //if (Tile.Y < centerTile.Y - offset.Y)
-        //{
-        //    Tile.Y += (WrappingWorld.Current.GridSize.Y + 1);
-        //    tmpV3.y += (WrappingWorld.Current.GridSize.Y + 1) * WrappingWorld.Current.TileSizeY;
-        //}
-
-        //if (Tile.Y > centerTile.Y + offset.Y)
-        //{
-        //    Tile.Y -= (WrappingWorld.Current.GridSize.Y + 1);
-        //    tmpV3.y -= (WrappingWorld.Current.GridSize.Y + 1) * WrappingWorld.Current.TileSizeY;
-        //}
 
         LastTile.X = Tile.X;
         LastTile.Y = Tile.Y;

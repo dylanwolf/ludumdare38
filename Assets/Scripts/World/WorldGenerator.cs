@@ -112,7 +112,7 @@ public class WorldGenerator : MonoBehaviour {
                     continue;
 
                 r = Random.value;
-                if (r >= 0.98f && world.Tiles[x,y] == TileType.Land)
+                if (r >= 0.995f && world.Tiles[x,y] == TileType.Land)
                 {
                     obj = new WorldObjectDefinition();
                     obj.Type = ObjectType.FuelTree;
@@ -121,7 +121,7 @@ public class WorldGenerator : MonoBehaviour {
                     world.Objects[obj.ID] = obj;
                     world.ObjectList.Add(obj);
                 }
-                else if (r >= 0.91f)
+                else if (r >= 0.975f)
                 {
                     obj = new WorldObjectDefinition();
                     obj.Type = ObjectType.FuelPickup;

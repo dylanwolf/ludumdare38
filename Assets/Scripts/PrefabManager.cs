@@ -9,6 +9,7 @@ public class PrefabManager : MonoBehaviour {
     public Bullet BulletPrefab;
     public FuelPickup FuelPickupPrefab;
     public FuelTree FuelTreePrefab;
+    public SpacePlanet PlanetPrefab;
 
     void Awake () {
         Current = this;

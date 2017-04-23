@@ -7,6 +7,8 @@ public class FuelTree : WrappingObject {
     static List<FuelTree> pool = new List<FuelTree>();
     static FuelTree tmpTree;
 
+    const string AUDIO_MINE = "Mine";
+
     public static FuelTree Spawn(string id, Vector3 position, int fuels)
     {
         tmpTree = null;
@@ -40,8 +42,7 @@ public class FuelTree : WrappingObject {
         obj.RemainingIntValue = Fuels;
     }
 
-    public float MinScatterX = 0.1f;
-    public float MaxScatterX = 0.25f;
+    public float ScatterX = 0.25f;
     public float ScatterY = 0.05f;
 
     [System.NonSerialized]
@@ -52,10 +53,11 @@ public class FuelTree : WrappingObject {
         if (Fuels > 0)
         {
             tmpV3 = transform.position;
-            tmpV3.x += Random.Range(MinScatterX, MaxScatterX) * (Random.value > 0.5f ? -1 : 1);
-            tmpV3.y += Random.Range(-ScatterY, ScatterY);
+            tmpV3.x += Random.Range(-ScatterX, ScatterX);
+            tmpV3.y -= Random.Range(0.01f, ScatterY);
             FuelPickup.Spawn(System.Guid.NewGuid().ToString(), tmpV3);
             Fuels--;
+            Soundboard.Play(AUDIO_MINE);
 
             if (Fuels == 0)
                 gameObject.SetActive(false);

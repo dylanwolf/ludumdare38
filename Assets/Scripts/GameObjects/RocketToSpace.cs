@@ -15,7 +15,7 @@ public class RocketToSpace : WrappingObject {
 
     public void ResetWorld()
     {
-        transform.position = Vector3.zero;
+        transform.position = new Vector3(0, 0.5f, 0);
         Tile.X = 0;
         Tile.Y = 0;
     }
