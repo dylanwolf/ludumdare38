@@ -43,6 +43,8 @@ public class PlayerCharacter : MonoBehaviour {
         anim = GetComponent<Animator>();
         _r = GetComponent<SpriteRenderer>();
 
+        Cursor.visible = false;
+
         ResetWorld();
     }
 
@@ -78,15 +80,25 @@ public class PlayerCharacter : MonoBehaviour {
         tmpV3.x = 0;
         tmpV3.y = 0;
         transform.position = tmpV3;
+
+        movement = Vector2.zero;
     }
 
     private void Update()
     {
+        if (Input.GetKey(KeyCode.Escape))
+            Application.Quit();
+
         if (GameState.CurrentState == GameState.GameMode.PlanetPlaying)
         {
             HandleLeaving();
             HandleShooting();
             HandleJumping();
+            HandleMovement();
+        }
+        else
+        {
+            movement = Vector2.zero;
         }
 
         _flameSr.enabled = isJumping;
@@ -96,7 +108,7 @@ public class PlayerCharacter : MonoBehaviour {
     {
         if (GameState.CurrentState == GameState.GameMode.PlanetPlaying)
         {
-            HandleMovement();
+            ApplyMovement();   
         }
         else
         {
@@ -183,12 +195,12 @@ public class PlayerCharacter : MonoBehaviour {
             Soundboard.ResetThrusters();
     }
 
+    Vector2 movement;
     Vector2 tmpV2;
     private void HandleMovement()
     {
-        tmpV2 = _rb.velocity;
-        tmpV2.x = (Input.GetAxis(HORIZONTAL_AXIS) * Speed) + pushback.x;
-        tmpV2.y = (Input.GetAxis(VERTICAL_AXIS) * Speed) + pushback.y;
+        movement.x = (Input.GetAxis(HORIZONTAL_AXIS) * Speed) + pushback.x;
+        movement.y = (Input.GetAxis(VERTICAL_AXIS) * Speed) + pushback.y;
 
         if (pushbackTimer > 0)
         {
@@ -197,10 +209,10 @@ public class PlayerCharacter : MonoBehaviour {
                 pushback = Vector3.zero;
         }
 
-        if (tmpV2.magnitude > 0)
+        if (movement.magnitude > 0)
         {
-            Facing.X = Mathf.Abs(tmpV2.x) >= Mathf.Abs(tmpV2.y) ? (int)Mathf.Sign(tmpV2.x) : 0;
-            Facing.Y = Mathf.Abs(tmpV2.y) > Mathf.Abs(tmpV2.x) ? (int)Mathf.Sign(tmpV2.y) : 0;
+            Facing.X = Mathf.Abs(movement.x) >= Mathf.Abs(movement.y) ? (int)Mathf.Sign(movement.x) : 0;
+            Facing.Y = Mathf.Abs(movement.y) > Mathf.Abs(movement.x) ? (int)Mathf.Sign(movement.y) : 0;
 
             if (Facing.X == 0 && Facing.Y < 0)
             {
@@ -224,8 +236,11 @@ public class PlayerCharacter : MonoBehaviour {
         {
             anim.SetBool(ANIM_ISWALKING, false);
         }
+    }
 
-        _rb.velocity = tmpV2;
+    void ApplyMovement()
+    {
+        _rb.velocity = movement;
     }
 
     Vector3 pushback;
